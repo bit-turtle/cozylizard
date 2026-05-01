@@ -11,8 +11,10 @@
 
 ; Imports
 .import startmenu
+.import game
 
 .segment "CODE"
 main:
 	jsr startmenu
+	jsr game
 	jmp main
