@@ -1,0 +1,59 @@
+Modules list:
+-------------
+engine.o:
+    CODE              Offs=000000  Size=000DF8  Align=00001  Fill=0000
+    RODATA            Offs=000000  Size=000215  Align=00001  Fill=0000
+    BSS               Offs=000000  Size=000120  Align=00001  Fill=0000
+    ZEROPAGE          Offs=000000  Size=00000E  Align=00001  Fill=0000
+    HEADER            Offs=000000  Size=000010  Align=00001  Fill=0000
+    TILES             Offs=000000  Size=002000  Align=00001  Fill=0000
+    VECTORS           Offs=000000  Size=000006  Align=00001  Fill=0000
+    OAM               Offs=000000  Size=000100  Align=00001  Fill=0000
+main.o:
+    CODE              Offs=000DF8  Size=000006  Align=00001  Fill=0000
+startmenu.o:
+    CODE              Offs=000DFE  Size=00009B  Align=00001  Fill=0000
+    ZEROPAGE          Offs=00000E  Size=000001  Align=00001  Fill=0000
+
+
+Segment list:
+-------------
+Name                   Start     End    Size  Align
+----------------------------------------------------
+HEADER                000000  00000F  000010  00001
+TILES                 000000  001FFF  002000  00001
+ZEROPAGE              000000  00000E  00000F  00001
+OAM                   000200  0002FF  000100  00001
+BSS                   000300  00041F  000120  00001
+CODE                  008000  008E98  000E99  00001
+RODATA                008E99  0090AD  000215  00001
+VECTORS               00FFFA  00FFFF  000006  00001
+
+
+Exports list by name:
+---------------------
+FamiToneMusicPlay         008096 RLA    main                      008DF8 RLA    
+ppu_update                008D6B RLA    ppu_update_tile           008D9F RLA    
+startmenu                 008E07 RLA    
+
+
+Exports list by value:
+----------------------
+FamiToneMusicPlay         008096 RLA    ppu_update                008D6B RLA    
+ppu_update_tile           008D9F RLA    main                      008DF8 RLA    
+startmenu                 008E07 RLA    
+
+
+Imports list:
+-------------
+FamiToneMusicPlay (engine.o):
+    startmenu.o               src/../prg/famitone.s:3
+main (main.o):
+    engine.o                  prg/engine.s:8
+ppu_update (engine.o):
+    startmenu.o               src/../prg/ppu.s:3
+ppu_update_tile (engine.o):
+    startmenu.o               src/../prg/ppu.s:4
+startmenu (startmenu.o):
+    main.o                    src/main.s:13
+

@@ -1,0 +1,13 @@
+# NES Game Tup Build File
+GAME = game
+
+# Famitone5.0
+: famitone5.0/text2data/text2vol5.cpp |> c++ %f -o %o -I tools/include |> tools/text2data
+: tools/text2data music/songs.txt |> tools/text2data music/songs.txt -ca65 -allin |> music/songs.s
+: tools/text2data music/songs.txt |> tools/text2data music/sfx.txt -ca65 -allin |> music/sfx.s
+# Engine
+: prg/engine.s famitone5.0/famitone5.s music/*.s chr/*.chr |> ca65 prg/engine.s -o %o |> build/engine.o
+# Game Code
+: foreach src/*.s |> ca65 %f -o %o |> build/%B.o
+# Link
+: build/*.o |> ld65 %f -C rom.cfg -o $(GAME).nes -m $(GAME).map.txt -Ln $(GAME).labels.txt --dbgfile $(GAME).nes.dbg |> $(GAME).nes $(GAME).map.txt $(GAME).labels.txt $(GAME).nes.dbg
