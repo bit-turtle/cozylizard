@@ -1,7 +1,7 @@
 Modules list:
 -------------
 engine.o:
-    CODE              Offs=000000  Size=000DF8  Align=00001  Fill=0000
+    CODE              Offs=000000  Size=000DF0  Align=00001  Fill=0000
     RODATA            Offs=000000  Size=000215  Align=00001  Fill=0000
     BSS               Offs=000000  Size=000120  Align=00001  Fill=0000
     ZEROPAGE          Offs=000000  Size=00000E  Align=00001  Fill=0000
@@ -10,17 +10,18 @@ engine.o:
     VECTORS           Offs=000000  Size=000006  Align=00001  Fill=0000
     OAM               Offs=000000  Size=000100  Align=00001  Fill=0000
 game.o:
-    CODE              Offs=000DF8  Size=000054  Align=00001  Fill=0000
-    ZEROPAGE          Offs=00000E  Size=000004  Align=00001  Fill=0000
+    CODE              Offs=000DF0  Size=000202  Align=00001  Fill=0000
+    RODATA            Offs=000215  Size=00041D  Align=00001  Fill=0000
+    ZEROPAGE          Offs=00000E  Size=000006  Align=00001  Fill=0000
 main.o:
-    CODE              Offs=000E4C  Size=000009  Align=00001  Fill=0000
+    CODE              Offs=000FF2  Size=000009  Align=00001  Fill=0000
 startmenu.o:
-    CODE              Offs=000E55  Size=000097  Align=00001  Fill=0000
-    RODATA            Offs=000215  Size=00015C  Align=00001  Fill=0000
-    ZEROPAGE          Offs=000012  Size=000001  Align=00001  Fill=0000
+    CODE              Offs=000FFB  Size=0000A7  Align=00001  Fill=0000
+    RODATA            Offs=000632  Size=00015C  Align=00001  Fill=0000
+    ZEROPAGE          Offs=000014  Size=000001  Align=00001  Fill=0000
 tile.o:
-    CODE              Offs=000EEC  Size=000031  Align=00001  Fill=0000
-    ZEROPAGE          Offs=000013  Size=000006  Align=00001  Fill=0000
+    CODE              Offs=0010A2  Size=000031  Align=00001  Fill=0000
+    ZEROPAGE          Offs=000015  Size=000006  Align=00001  Fill=0000
 
 
 Segment list:
@@ -29,50 +30,47 @@ Name                   Start     End    Size  Align
 ----------------------------------------------------
 HEADER                000000  00000F  000010  00001
 TILES                 000000  001FFF  002000  00001
-ZEROPAGE              000000  000018  000019  00001
+ZEROPAGE              000000  00001A  00001B  00001
 OAM                   000200  0002FF  000100  00001
 BSS                   000300  00041F  000120  00001
-CODE                  008000  008F1C  000F1D  00001
-RODATA                008F1D  00928D  000371  00001
+CODE                  008000  0090D2  0010D3  00001
+RODATA                0090D3  009860  00078E  00001
 VECTORS               00FFFA  00FFFF  000006  00001
 
 
 Exports list by name:
 ---------------------
-FamiToneMusicPlay         008096 RLA    PAD_L                     000040 REZ    
-PAD_R                     000080 REZ    game                      008E2B RLA    
-gamepad                   00000D RLZ    gamepad_poll              008DDC RLA    
-main                      008E4C RLA    oam                       000200 RLA    
-ppu_update                008D6B RLA    ppu_update_tile           008D9F RLA    
-put_line                  008F07 RLA    startmenu                 008E5E RLA    
-
+FamiToneMusicPlay         008096 RLA    FamiToneMusicStop         008058 RLA    
+game                      008FB3 RLA    gamepad                   00000D RLZ    
+gamepad_poll              008DDC RLA    main                      008FF2 RLA    
+oam                       000200 RLA    ppu_update                008D6B RLA    
+ppu_update_tile           008D9F RLA    put_line                  0090BD RLA    
+startmenu                 009004 RLA    
 
 
 Exports list by value:
 ----------------------
-gamepad                   00000D RLZ    PAD_L                     000040 REZ    
-PAD_R                     000080 REZ    oam                       000200 RLA    
-FamiToneMusicPlay         008096 RLA    ppu_update                008D6B RLA    
-ppu_update_tile           008D9F RLA    gamepad_poll              008DDC RLA    
-game                      008E2B RLA    main                      008E4C RLA    
-startmenu                 008E5E RLA    put_line                  008F07 RLA    
-
+gamepad                   00000D RLZ    oam                       000200 RLA    
+FamiToneMusicStop         008058 RLA    FamiToneMusicPlay         008096 RLA    
+ppu_update                008D6B RLA    ppu_update_tile           008D9F RLA    
+gamepad_poll              008DDC RLA    game                      008FB3 RLA    
+main                      008FF2 RLA    startmenu                 009004 RLA    
+put_line                  0090BD RLA    
 
 
 Imports list:
 -------------
 FamiToneMusicPlay (engine.o):
-    startmenu.o               src/../prg/famitone.s:3
+    startmenu.o               src/../prg/famitone.s:4
+FamiToneMusicStop (engine.o):
     game.o                    src/../prg/famitone.s:3
-PAD_L (engine.o):
-    game.o                    src/../prg/gamepad.s:10
-PAD_R (engine.o):
-    game.o                    src/../prg/gamepad.s:11
 game (game.o):
     main.o                    src/main.s:14
 gamepad (engine.o):
+    startmenu.o               src/../prg/gamepad.s:3
     game.o                    src/../prg/gamepad.s:3
 gamepad_poll (engine.o):
+    startmenu.o               src/../prg/gamepad.s:12
     game.o                    src/../prg/gamepad.s:12
 main (main.o):
     engine.o                  prg/engine.s:8
@@ -85,6 +83,7 @@ ppu_update_tile (engine.o):
     tile.o                    src/../prg/ppu.s:4
 put_line (tile.o):
     startmenu.o               src/startmenu.s:8
+    game.o                    src/game.s:9
 startmenu (startmenu.o):
     main.o                    src/main.s:13
 

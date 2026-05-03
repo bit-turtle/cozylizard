@@ -9,6 +9,7 @@
 
 ; Export relevant Famitone functions
 .export FamiToneMusicPlay
+.export FamiToneMusicStop
 .export FamiToneSfxPlay
 
 ; Export utility functions
@@ -419,26 +420,22 @@ gamepad: .res 1
 ;   This only reads the first gamepad, and also if DPCM samples are played they can
 ;   conflict with gamepad reading, which may give incorrect results.
 gamepad_poll:
-	; strobe the gamepad to latch current button state
-	lda #1
-	sta $4016
-	lda #0
-	sta $4016
-	; read 8 bytes from the interface at $4016
-	ldx #8
-	:
-		pha
-		lda $4016
-		; combine low two bits and store in carry bit
-		and #%00000011
-		cmp #%00000001
-		pla
-		; rotate carry into gamepad variable
-		ror
-		dex
-		bne :-
-	sta gamepad
-	rts
+    lda #$01
+    ; While the strobe bit is set, buttons will be continuously reloaded.
+    ; This means that reading from JOYPAD1 will only return the state of the
+    ; first button: button A.
+    sta $4016
+    sta gamepad
+    lsr a        ; now A is 0
+    ; By storing 0 into JOYPAD1, the strobe bit is cleared and the reloading stops.
+    ; This allows all 8 buttons (newly reloaded) to be read from JOYPAD1.
+    sta $4016
+@loop:
+    lda $4016
+    lsr a        ; bit 0 -> Carry
+    rol gamepad  ; Carry -> bit 0; bit 7 -> Carry
+    bcc @loop
+    rts
 
 ;
 ; end of file

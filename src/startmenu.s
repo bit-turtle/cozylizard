@@ -96,5 +96,13 @@ startmenu:
 	lda #0
 	jsr FamiToneMusicPlay
 @loop:
+	jsr gamepad_poll
+	lda gamepad
+	bne @done
 	jsr ppu_update
 	jmp @loop
+@done:
+	jsr ppu_update
+	lda #0
+	jsr FamiToneMusicPlay
+	rts
